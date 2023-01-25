@@ -4,8 +4,8 @@ import { MongoClient } from 'mongodb'
 import dotenv from 'dotenv'
 import bcrypt from 'bcrypt'
 import { v4 as uuid } from 'uuid'
-import joi from "joi"
-import { getUnpackedSettings } from 'http2'
+
+import { signUpSchema, signInSchema } from './schemas/auth.schema.js'
 
 dotenv.config()
 const mongoClient = new MongoClient(process.env.DATABASE_URL)
@@ -22,18 +22,6 @@ export default db;
 const app = express()
 app.use(express.json())
 app.use(cors())
-
-const signUpSchema = joi.object({
-  name: joi.string().required(),
-  email: joi.string().email().required(),
-  password: joi.string().required(),
-  confirmPassword: joi.ref('password')
-})
-
-const signInSchema = joi.object({
-  email: joi.string().email().required(),
-  password: joi.string().required()
-})
 
 app.post('/sign-up', async (req, res) => {
   const { name, email, password, confirmPassword } = req.body
