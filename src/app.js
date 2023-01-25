@@ -3,7 +3,9 @@ import cors from 'cors'
 import { MongoClient } from 'mongodb'
 import dotenv from 'dotenv'
 import bcrypt from 'bcrypt'
+import { v4 as uuid } from 'uuid'
 import joi from "joi"
+import { getUnpackedSettings } from 'http2'
 
 dotenv.config()
 const mongoClient = new MongoClient(process.env.DATABASE_URL)
@@ -39,7 +41,6 @@ app.post('/sign-up', async (req, res) => {
     const { error } = signUpSchema.validate({name, email, password, confirmPassword});
     if (error) return res.status(422).send(error.details.map(detail => detail.message));
     const user = await db.collection('users').findOne({ email })
-
     if (user) return res.sendStatus(409)
     const SALT = 10
     const hash = bcrypt.hashSync(password, SALT)
@@ -48,7 +49,28 @@ app.post('/sign-up', async (req, res) => {
   } catch (error) {
     return res.sendStatus(500)
   }
+})
 
+app.post('/sign-in', async (req, res) => {
+  const { email, password } = req.body
+  try {
+    const { error } = signInSchema.validate({email, password});
+    if (error) return res.status(422).send(error.details.map(detail => detail.message));
+    const user = await db.collection('users').findOne({ email })
+    if (!user) return res.sendStatus(404)
+
+    if(bcrypt.compareSync(password, user.password)){
+      const token = uuid()
+      const data = {
+        token,
+        userId: user._id
+      }
+      await db.collection('sessions').insertOne(data)
+      return res.send(data)
+    }
+  } catch (error) {
+    return res.sendStatus(500)
+  }
 })
 
 
