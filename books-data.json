@@ -1,0 +1,37 @@
+[
+	{
+		"title": "The Great Gatsby",
+		"author": "F. Scott Fitzgerald",
+		"description": "The Great Gatsby is a novel by F. Scott Fitzgerald, published in 1925. The story takes place in the summer of 1922, in the fictional town of West Egg on Long Island. The novel explores themes of decadence, excess, social upheaval, and resistance to change.",
+		"pagesNumber": 180,
+		"imageURL": "https://images.gr-assets.com/books/1513356589l/4671.jpg"
+	},
+	{
+		"title": "To Kill a Mockingbird",
+		"author": "Harper Lee",
+		"description": "To Kill a Mockingbird is a novel by Harper Lee, published in 1960. The story is set in the fictional town of Maycomb, Alabama, during the Great Depression, and it explores themes of racial injustice and the destruction of innocence. ",
+		"pagesNumber": 281,
+		"imageURL": "https://images.gr-assets.com/books/1361975680l/2657.jpg"
+	},
+	{
+		"title": "The Catcher in the Rye",
+		"author": "J.D. Salinger",
+		"description": "The Catcher in the Rye is a novel by J.D. Salinger, published in 1951. The story is set in the late 1940s and tells the story of a teenage boy named Holden Caulfield, who is struggling with the complexities of life and growing up. The novel explores themes of alienation, loss of innocence, and the struggle to find one's place in the world.",
+		"pagesNumber": 277,
+		"imageURL": "https://images.gr-assets.com/books/1449752180l/5107.jpg"
+	},
+	{
+		"title": "The Lord of the Rings",
+		"author": "J.R.R. Tolkien",
+		"description": "The Lord of the Rings is a fantasy novel by J.R.R. Tolkien, published in three volumes between 1954 and 1955. The story is set in the fictional world of Middle-earth, and it follows hobbit Frodo Baggins as he embarks on a quest to destroy the One Ring, a powerful and dangerous artifact created by the Dark Lord Sauron.",
+		"pagesNumber": 1178,
+		"imageURL": "https://images.gr-assets.com/books/1447303603l/7613.jpg"
+	},
+	{
+		"title": "The Hobbit",
+		"author": "J.R.R. Tolkien",
+		"description": "The Hobbit is a fantasy novel by J.R.R. Tolkien, published in 1937. The story is set in the fictional world of Middle-earth, and it follows hobbit Bilbo Baggins as he is swept into an epic quest to reclaim the Lonely Mountain and the treasure within it from the dragon Smaug.",
+		"pagesNumber": 310,
+		"imageURL": "https://images.gr-assets.com/books/1447303603l/7613.jpg"
+	}
+]
