@@ -103,6 +103,26 @@ app.post("/user-bag", async (req, res) => {
 	}
 });
 
+app.get("/user-bag", async (req, res) => {
+	const { token } = req.headers;
+
+	try {
+		const foundUserSession = await db.collection("sessions").findOne({});
+		if (!foundUserSession) return res.sendStatus(401);
+
+		const user = await db
+			.collection("users")
+			.findOne({ _id: new ObjectId(foundUserSession.userId) });
+
+		if (!user.userBag) res.status(200).send([]);
+
+		return res.status(200).send(user.userBag);
+	} catch (error) {
+		console.log(error);
+		return res.sendStatus(500);
+	}
+});
+
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
