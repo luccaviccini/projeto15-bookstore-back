@@ -74,16 +74,18 @@ app.post("/user-bag", async (req, res) => {
 		const foundBook = await db
 			.collection("books")
 			.findOne({ _id: new ObjectId(bookId) });
-
 		if (!foundBook) return res.sendStatus(404);
 
 		const user = await db
 			.collection("users")
 			.findOne({ _id: new ObjectId(foundUserSession.userId) });
-		const isBookAlreadyOnBag = user.userBag.find(
-			(item) => item.bookId === bookId
-		);
-		if (isBookAlreadyOnBag) return res.sendStatus(409);
+
+		if (user.userBag) {
+			const isBookAlreadyOnBag = user.userBag.find(
+				(item) => item.bookId === bookId
+			);
+			if (isBookAlreadyOnBag) return res.sendStatus(409);
+		}
 
 		await db.collection("users").findOneAndUpdate(
 			{ _id: new ObjectId(foundUserSession.userId) },
@@ -96,6 +98,7 @@ app.post("/user-bag", async (req, res) => {
 
 		return res.sendStatus(200);
 	} catch (error) {
+		console.log(error);
 		return res.sendStatus(500);
 	}
 });
