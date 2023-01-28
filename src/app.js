@@ -68,7 +68,9 @@ app.post("/user-bag", async (req, res) => {
 	const { token } = req.headers;
 
 	try {
-		const foundUserSession = await db.collection("sessions").findOne({});
+		const foundUserSession = await db
+			.collection("sessions")
+			.findOne({ token });
 		if (!foundUserSession) return res.sendStatus(401);
 
 		const foundBook = await db
@@ -107,7 +109,9 @@ app.get("/user-bag", async (req, res) => {
 	const { token } = req.headers;
 
 	try {
-		const foundUserSession = await db.collection("sessions").findOne({});
+		const foundUserSession = await db
+			.collection("sessions")
+			.findOne({ token });
 		if (!foundUserSession) return res.sendStatus(401);
 
 		const user = await db
@@ -127,6 +131,57 @@ app.get("/user-bag", async (req, res) => {
 
 		console.log(bag);
 		return res.status(200).send(bag);
+	} catch (error) {
+		console.log(error);
+		return res.sendStatus(500);
+	}
+});
+
+app.get("/user-adress", async (req, res) => {
+	const { token } = req.headers;
+
+	try {
+		const foundUserSession = await db
+			.collection("sessions")
+			.findOne({ token });
+		if (!foundUserSession) return res.sendStatus(401);
+
+		const user = await db
+			.collection("users")
+			.findOne({ _id: new ObjectId(foundUserSession.userId) });
+
+		if (!user.adress) res.status(200).send(null);
+		return res.status(200).send(user.adress);
+	} catch (error) {
+		console.log(error);
+		return res.sendStatus(500);
+	}
+});
+
+app.post("/user-adress", async (req, res) => {
+	const { token } = req.headers;
+	const adress = req.body;
+
+	const { error } = adressSchema.validate({ adress });
+	if (error)
+		return res
+			.status(422)
+			.send(error.details.map((detail) => detail.message));
+
+	try {
+		const foundUserSession = await db
+			.collection("sessions")
+			.findOne({ token });
+		if (!foundUserSession) return res.sendStatus(401);
+
+		await db.collection("users").findOneAndUpdate(
+			{ _id: new ObjectId(foundUserSession.userId) },
+			{
+				$push: {
+					adress: adress,
+				},
+			}
+		);
 	} catch (error) {
 		console.log(error);
 		return res.sendStatus(500);
