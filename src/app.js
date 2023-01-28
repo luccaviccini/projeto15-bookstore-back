@@ -22,7 +22,7 @@ app.post("/sign-up", async (req, res) => {
 			email,
 			password,
 			confirmPassword,
-		});
+		},{abortEarly: false});
 		if (error)
 			return res
 				.status(422)
@@ -41,7 +41,7 @@ app.post("/sign-up", async (req, res) => {
 app.post("/sign-in", async (req, res) => {
 	const { email, password } = req.body;
 	try {
-		const { error } = signInSchema.validate({ email, password });
+		const { error } = signInSchema.validate({ email, password },{abortEarly: false});
 		if (error)
 			return res
 				.status(422)
