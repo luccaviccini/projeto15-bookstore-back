@@ -116,7 +116,17 @@ app.get("/user-bag", async (req, res) => {
 
 		if (!user.userBag) res.status(200).send([]);
 
-		return res.status(200).send(user.userBag);
+		const obj_ids = user.userBag.map(function (item) {
+			return ObjectId(item.bookId);
+		});
+
+		const bag = await db
+			.collection("books")
+			.find({ _id: { $in: obj_ids } })
+			.toArray();
+
+		console.log(bag);
+		return res.status(200).send(bag);
 	} catch (error) {
 		console.log(error);
 		return res.sendStatus(500);
