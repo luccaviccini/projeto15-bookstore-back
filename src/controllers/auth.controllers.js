@@ -1,22 +1,14 @@
 
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
-import { signUpSchema, signInSchema } from "../schemas/auth.schema.js";
+import { signInSchema } from "../schemas/auth.schema.js";
 import db from "./../dataBase/db.js";
 
 export async function signUp(req, res){
-	const { name, email, password, confirmPassword } = req.body;
 	try {
-		const { error } = signUpSchema.validate({
-			name,
-			email,
-			password,
-			confirmPassword,
-		},{abortEarly: false});
-		if (error)
-			return res
-				.status(422)
-				.send(error.details.map((detail) => detail.message));
+		const {name, email, password} = res.locals.user
+		console.log("name",name)
+		console.log("email",email)
 		const user = await db.collection("users").findOne({ email });
 		if (user) return res.sendStatus(409);
 		const SALT = 10;
