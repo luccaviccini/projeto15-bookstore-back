@@ -65,8 +65,10 @@ app.post("/sign-in", async (req, res) => {
 
 
 app.get("/books", async (req, res) => {
+	const { authorization } = req.headers;
+  	const token = authorization?.replace("Bearer ", "");
 
-	const { token } = req.headers;
+
 	//check token in sessions
 	try {
 		const foundUserSession = await db.collection("sessions").findOne({token});
@@ -93,10 +95,12 @@ app.get("/books", async (req, res) => {
 
 app.post("/user-bag", async (req, res) => {
 	const { bookId } = req.body;
-	const { token } = req.headers;
+	
+	const { authorization } = req.headers;
+  	const token = authorization?.replace("Bearer ", "");
 
 	try {
-		const foundUserSession = await db.collection("sessions").findOne({});
+		const foundUserSession = await db.collection("sessions").findOne({token});
 		if (!foundUserSession) return res.sendStatus(401);
 
 		const foundBook = await db
