@@ -93,9 +93,6 @@ app.get("/user-bag", async (req, res) => {
   const { authorization } = req.headers;
   const token = authorization?.replace("Bearer ", "");
 
-  console.log("OLHA QUEM CHEGOU",token)
-
-
 	try {
 		const foundUserSession = await db.collection("sessions").findOne({token});
 		if (!foundUserSession) return res.sendStatus(401);
@@ -103,10 +100,69 @@ app.get("/user-bag", async (req, res) => {
 		const user = await db
 			.collection("users")
 			.findOne({ _id: new ObjectId(foundUserSession.userId) });
-
 		if (!user.userBag) res.status(200).send([]);
 
-		return res.status(200).send(user.userBag);
+		const obj_ids = user.userBag.map(function (item) {
+			return ObjectId(item.bookId);
+		});
+
+		const bag = await db
+			.collection("books")
+			.find({ _id: { $in: obj_ids } })
+			.toArray();
+		return res.status(200).send(bag);
+	} catch (error) {
+		console.log(error);
+		return res.sendStatus(500);
+	}
+});
+
+app.get("/user-adress", async (req, res) => {
+	  const { authorization } = req.headers;
+  const token = authorization?.replace("Bearer ", "");
+
+	try {
+		const foundUserSession = await db
+			.collection("sessions")
+			.findOne({ token });
+		if (!foundUserSession) return res.sendStatus(401);
+
+		const user = await db
+			.collection("users")
+			.findOne({ _id: new ObjectId(foundUserSession.userId) });
+
+		if (!user.adress) res.status(200).send(null);
+		return res.status(200).send(user.adress);
+	} catch (error) {
+		return res.sendStatus(500);
+	}
+});
+
+app.post("/user-adress", async (req, res) => {
+	const { authorization } = req.headers;
+  const token = authorization?.replace("Bearer ", "");
+	const adress = req.body;
+	const { error } = adressSchema.validate({ adress });
+  
+	if (error)
+		return res
+			.status(422)
+			.send(error.details.map((detail) => detail.message));
+
+	try {
+		const foundUserSession = await db
+			.collection("sessions")
+			.findOne({ token });
+		if (!foundUserSession) return res.sendStatus(401);
+
+		await db.collection("users").findOneAndUpdate(
+			{ _id: new ObjectId(foundUserSession.userId) },
+			{
+				$push: {
+					adress: adress,
+				},
+			}
+		);
 	} catch (error) {
 		console.log(error);
 		return res.sendStatus(500);
