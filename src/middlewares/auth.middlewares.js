@@ -1,4 +1,4 @@
-import {signUpSchema} from './../schemas/auth.schema.js'
+import {signUpSchema, signInSchema} from './../schemas/auth.schema.js'
 
 export function signUpValidation(req, res, next) {
   const user = req.body
@@ -13,6 +13,18 @@ export function signUpValidation(req, res, next) {
     return res
       .status(422)
       .send(error.details.map((detail) => detail.message));
+  res.locals.user = user
+  next()
+}
+
+export function signInValidation(req, res, next){
+  const user = req.body
+  const { email, password } = user
+  const { error } = signInSchema.validate({ email, password },{abortEarly: false});
+		if (error)
+			return res
+				.status(422)
+				.send(error.details.map((detail) => detail.message));
   res.locals.user = user
   next()
 }

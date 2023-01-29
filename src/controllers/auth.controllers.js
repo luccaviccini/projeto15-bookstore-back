@@ -7,8 +7,6 @@ import db from "./../dataBase/db.js";
 export async function signUp(req, res){
 	try {
 		const {name, email, password} = res.locals.user
-		console.log("name",name)
-		console.log("email",email)
 		const user = await db.collection("users").findOne({ email });
 		if (user) return res.sendStatus(409);
 		const SALT = 10;
@@ -21,16 +19,10 @@ export async function signUp(req, res){
 }
 
 export async function signIn (req, res){
-	const { email, password } = req.body;
 	try {
-		const { error } = signInSchema.validate({ email, password },{abortEarly: false});
-		if (error)
-			return res
-				.status(422)
-				.send(error.details.map((detail) => detail.message));
+		const { email, password } = res.locals.user;
 		const user = await db.collection("users").findOne({ email });
 		if (!user) return res.sendStatus(404);
-
 		if (bcrypt.compareSync(password, user.password)) {
 			const token = uuid();
 			const data = {
