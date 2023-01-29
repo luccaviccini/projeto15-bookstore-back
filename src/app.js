@@ -6,7 +6,6 @@ import db from "./dataBase/db.js";
 import { ObjectId } from "mongodb";
 
 import authRoutes from "./routes/auth.routes.js";
-import { adressSchema } from "./schemas/adress.schema.js";
 import salesRoutes from "./routes/sales.routes.js";
 
 dotenv.config();

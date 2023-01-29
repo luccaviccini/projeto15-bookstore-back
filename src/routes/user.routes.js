@@ -1,7 +1,6 @@
 import { Router } from "express";
-import { changeAdress, getAdress } from "../controllers/adress.controller";
-import { addNewItemToBag, getUserBag } from "../controllers/bag.controller";
-import { order } from "../controllers/sales.controller";
+import { changeAdress, getAdress } from "../controllers/adress.controller.js";
+import { addNewItemToBag, getUserBag } from "../controllers/bag.controller.js";
 
 const user = Router();
 

@@ -1,3 +1,5 @@
+import { paymentSchema } from "../schemas/payment-method.schema.js";
+
 export async function order(req, res) {
 	const { authorization } = req.headers;
 	const token = authorization?.replace("Bearer ", "");

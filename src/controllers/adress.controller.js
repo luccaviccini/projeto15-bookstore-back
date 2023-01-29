@@ -1,3 +1,5 @@
+import { adressSchema } from "../schemas/adress.schema.js";
+
 export async function getAdress(req, res) {
 	const { authorization } = req.headers;
 	const token = authorization?.replace("Bearer ", "");
