@@ -7,6 +7,7 @@ import { ObjectId } from "mongodb";
 
 import authRoutes from "./routes/auth.routes.js";
 import salesRoutes from "./routes/sales.routes.js";
+import userRoutes from "./routes/user.routes.js";
 
 dotenv.config();
 
@@ -14,7 +15,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use([authRoutes, salesRoutes]);
+app.use([authRoutes, salesRoutes, userRoutes]);
 
 app.get("/books", async (req, res) => {
 	const { authorization } = req.headers;

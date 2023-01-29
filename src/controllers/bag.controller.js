@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import db from "../dataBase/db";
+import db from "../dataBase/db.js";
 
 export async function addNewItemToBag(req, res) {
 	const { bookId } = req.body;
